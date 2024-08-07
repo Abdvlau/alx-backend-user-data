@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-Auth class defined here
+"""Auth class defined here
 """
 from flask import abort, request
 from typing import List, TypeVar
@@ -38,6 +37,6 @@ class Auth:
             return auth_header
         return None
 
-    def current_user(self, request=None) -> TypeVar('User'): # type: ignore
+    def current_user(self, request=None) -> TypeVar('User'):  # type: ignore
         """ doc str """
         return None
