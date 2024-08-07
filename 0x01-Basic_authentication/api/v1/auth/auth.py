@@ -1,23 +1,43 @@
 #!/usr/bin/env python3
-""" Module that contains a class that manages
-API authentication
 """
-
-from flask import request
+Auth class defined here
+"""
+from flask import abort, request
 from typing import List, TypeVar
+from models.user import User
+import re
 
 
 class Auth:
-    """A class that manages API authentication"""
+    """ Auth class """
 
-    def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
-        """ Returns False. Path and excluded_paths will be used later """
-        return False
+    def require_auth(
+        self, path: str, excluded_paths: List[str]
+    ) -> bool:
+        """ determines if authentication is required """
+        if path is None or not excluded_paths:
+            return True
+
+        if path[-1] != '/':
+            path = path + '/'
+        for pth in excluded_paths:
+            if pth[-1] == '*':
+                pth = pth[:-1] + '.*'
+            if re.fullmatch(pth, path):
+                return False
+
+        return True
 
     def authorization_header(self, request=None) -> str:
-        """ Returns None. Request will be the Flask request object """
+        """ doc str """
+        if request is None:
+            return None
+
+        auth_header = request.headers.get('Authorization')
+        if auth_header:
+            return auth_header
         return None
 
-    def current_user(self, request=None) -> TypeVar('User'):  # type: ignore
-        """ Returns None. Request will be the Flask request object """
+    def current_user(self, request=None) -> TypeVar('User'): # type: ignore
+        """ doc str """
         return None
